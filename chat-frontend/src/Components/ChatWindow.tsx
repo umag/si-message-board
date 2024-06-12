@@ -56,11 +56,21 @@ const ChatWindow: React.FC = () => {
         setNewMessage(message.body);
     };
 
+    const handleDeleteMessage = (id: number) => {
+        axios.delete(`${config.apiBaseUrl}/api/messages/${id}`)
+            .then(() => {
+                setMessages(messages.filter(msg => msg.id !== id));
+            })
+            .catch(error => {
+                console.error('Error deleting message:', error);
+            });
+    };
+
     return (
         <div>
             <div className="message-list">
                 {messages.map(msg => (
-                    <Message key={msg.id} message={msg} onEdit={() => handleEditMessage(msg)} />
+                    <Message key={msg.id} message={msg} onEdit={() => handleEditMessage(msg)} onDelete={() => handleDeleteMessage(msg.id)} />
                 ))}
             </div>
             <div className="message-input">

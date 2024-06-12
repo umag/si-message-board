@@ -26,6 +26,14 @@
   background-color: #0056b3;
 }
 
+.message button:nth-child(2) {
+  background-color: red;
+}
+
+.message button:nth-child(2):hover {
+  background-color: darkred;
+}
+
 .message-input {
   display: flex;
   justify-content: space-between;

@@ -54,7 +54,7 @@ impl ModelController {
         store.get_mut(id as usize).and_then(|m| m.take());
         message.ok_or(Error::MessageDeleteFailIdNotFound { id })
     }
-// Update a message by id and return old message
+// Update a message by id and return new message
     pub async fn update_message(&self, id: u64, message_fc: MessageForCreate) -> Result<Message> {
         let mut store = self.messages_store.lock().unwrap();
         let mut new_message = Message {
@@ -63,6 +63,12 @@ impl ModelController {
         };
         let message = 
         store.get_mut(id as usize).and_then(|m| m.replace(new_message.clone()));
-        message.ok_or(Error::MessageUpdateFailIdNotFound { id })
+        if message   
+        .is_some() {
+            Ok(new_message)
+        } else {
+            Err(Error::MessageUpdateFailIdNotFound { id })
+        }
+            
     }
 }
