@@ -5,7 +5,6 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug)]
 pub enum Error {
-    LoginFail,
     MessageDeleteFailIdNotFound { id: u64 },
     MessageUpdateFailIdNotFound { id: u64 },
 }
@@ -21,7 +20,6 @@ impl IntoResponse for Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
-            Error::LoginFail => write!(f, "Login failed"),
             Error::MessageDeleteFailIdNotFound { id } => {
                 write!(f, "Message delete failed, id not found: {}", id)
             },
