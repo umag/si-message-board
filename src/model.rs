@@ -1,7 +1,7 @@
 
 use crate::{Error, Result};
 use serde::{Deserialize, Serialize};
-use std::sync::{Arc, Mutex};
+use std::{fs::OpenOptions, sync::{Arc, Mutex}};
 
 #[derive(Clone,Debug, Serialize)]
 pub struct Message {
@@ -51,11 +51,13 @@ impl ModelController {
     }
 
     pub async fn update_message(&self, id: u64, message_fc: MessageForCreate) -> Result<Message> {
-      /*   let mut store = self.messages_store.lock().unwrap();
+        let mut store = self.messages_store.lock().unwrap();
+        let mut new_message = Message {
+            id,
+            body: message_fc.body.clone(),
+        };
         let message = 
-        store.get_mut(id as usize).and_then(|m| m.replace(message_fc));
-
-        Ok(message) */
-        todo!()
+        store.get_mut(id as usize).and_then(|m| m.replace(new_message.clone()));
+        message.ok_or(Error::MessageUpdateFailIdNotFound { id })
     }
 }
