@@ -72,3 +72,58 @@ impl ModelController {
             
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use tokio::sync::oneshot;
+
+    #[tokio::test]
+    async fn test_create_message() {
+        let mc = ModelController::new().await.unwrap();
+        let message_fc = MessageForCreate {
+            body: "Hello, world!".to_string(),
+        };
+        let message = mc.create_message(message_fc).await.unwrap();
+        assert_eq!(message.body, "Hello, world!");
+    }
+
+    #[tokio::test]
+    async fn test_list_messages() {
+        let mc = ModelController::new().await.unwrap();
+        let message_fc = MessageForCreate {
+            body: "Hello, world!".to_string(),
+        };
+        let message = mc.create_message(message_fc).await.unwrap();
+        let messages = mc.list_messages().await.unwrap();
+        assert_eq!(messages.len(), 1);
+        assert_eq!(messages[0].body, "Hello, world!");
+    }
+
+    #[tokio::test]
+    async fn test_delete_message() {
+        let mc = ModelController::new().await.unwrap();
+        let message_fc = MessageForCreate {
+            body: "Hello, world!".to_string(),
+        };
+        let message = mc.create_message(message_fc).await.unwrap();
+        let message = mc.delete_message(0).await.unwrap();
+        assert_eq!(message.body, "Hello, world!");
+        let messages = mc.list_messages().await.unwrap();
+        assert_eq!(messages.len(), 0);
+    }
+
+    #[tokio::test]
+    async fn test_update_message() {
+        let mc = ModelController::new().await.unwrap();
+        let message_fc = MessageForCreate {
+            body: "Hello, world!".to_string(),
+        };
+        let message = mc.create_message(message_fc).await.unwrap();
+        let message_fc = MessageForCreate {
+            body: "Hello, SI!".to_string(),
+        };
+        let message = mc.update_message(0, message_fc).await.unwrap();
+        assert_eq!(message.body, "Hello, SI!");
+    }
+}
