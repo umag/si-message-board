@@ -16,7 +16,7 @@ impl IntoResponse for Error {
         (StatusCode::INTERNAL_SERVER_ERROR, "UNHANDLED_CLIENT_ERROR").into_response()
     }
 }
-
+// Implement Display for Error to be able to print it
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {

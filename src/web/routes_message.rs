@@ -7,7 +7,7 @@ use tokio::io::Join;
 use crate::model::{ModelController, Message, MessageForCreate};
 use crate::Result;
 
-
+// response for create_message
 async fn create_message(
     State(mc): State<ModelController>,
     Json(message_fc): Json<MessageForCreate>,
@@ -18,6 +18,7 @@ async fn create_message(
     Ok(Json(message))
 }
 
+// response for list_messages
 async fn list_messages(
     State(mc): State<ModelController>,
 )-> Result<Json<Vec<Message>>> {
@@ -27,6 +28,7 @@ async fn list_messages(
     Ok(Json(messages))
 }
 
+// response for delete_message
 async fn delete_message(
     State(mc): State<ModelController>,
     Path(id): Path<u64>,
@@ -37,6 +39,7 @@ async fn delete_message(
     Ok(Json(message))
 }
 
+// response for update_message
 async fn update_message(
     State(mc): State<ModelController>,
     Path(id): Path<u64>,
@@ -48,6 +51,7 @@ async fn update_message(
     Ok(Json(message))
 }
 
+// routes for message api
 pub fn routes(mc: ModelController) -> Router {
     Router::new()
     .route("/messages", post(create_message).get(list_messages))
