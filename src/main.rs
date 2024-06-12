@@ -3,6 +3,7 @@
 use axum::*;
 use axum::routing::*;
 use tower_http::services::ServeDir;
+use tower_http::cors::CorsLayer;
 pub use self::error::{Error, Result};
 
 mod error;
@@ -15,11 +16,12 @@ async fn main() -> Result<()>{
 // Lets gather all routes in one place
     let routes_all = Router::new()
     .nest("/api", web::routes_message::routes(mc.clone()))
+    .layer(CorsLayer::permissive())
     .fallback_service(routes_static());
     
 // Start server
     let app = routes_all;
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3001")
     .await.unwrap();
     println!("->> LISTENING ON: {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
