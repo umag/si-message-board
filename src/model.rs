@@ -1,5 +1,4 @@
 
-
 use crate::{Error, Result};
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
@@ -33,28 +32,30 @@ impl ModelController {
         id,
         body: message_fc.body,
     };
-    store.push(Some(Message.clone()));
+    store.push(Some(message.clone()));
 
-    Ok(Message)
+    Ok(message)
     }
 
     pub async fn list_messages(&self) -> Result<Vec<Message>> {
         let store = self.messages_store.lock().unwrap();
-        let messages = store.iter().filter_map(|t| t.clone()).collect();
+        let messages = store.iter().filter_map(|m| m.clone()).collect();
         Ok(messages)
     }
 
     pub async fn delete_message(&self, id: u64) -> Result<Message> {
         let mut store = self.messages_store.lock().unwrap();
-        let Message = 
-        store.get_mut(id as usize).and_then(|t| t.take());
+        let message = 
+        store.get_mut(id as usize).and_then(|m| m.take());
         message.ok_or(Error::MessageDeleteFailIdNotFound { id })
     }
 
     pub async fn update_message(&self, id: u64, message_fc: MessageForCreate) -> Result<Message> {
-        let mut store = self.messages_store.lock().unwrap();
-        let message = store.get_mut(id as usize).ok_or(Error::MessageUpdateFailIdNotFound { id })?;
-        message.body = message_fc.body.clone();
-        Ok(message)
+      /*   let mut store = self.messages_store.lock().unwrap();
+        let message = 
+        store.get_mut(id as usize).and_then(|m| m.replace(message_fc));
+
+        Ok(message) */
+        todo!()
     }
 }
