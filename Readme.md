@@ -1,6 +1,6 @@
 How to run your application
-```cargo run``` to start server
-```cd chat-frontend && npm start``` to start frontend while server is running
+```cargo run``` to start server will listen on port 3001
+```cd chat-frontend && npm i && npm start``` to start frontend on port 3000 while server is running
 
 Tests could be executed via ```cargo test``` and with running server ```cargo test -q quick_dev -- --nocapture --include-ignored```
 
